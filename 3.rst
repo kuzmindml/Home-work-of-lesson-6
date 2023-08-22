@@ -1,0 +1,84 @@
+Tax rates and IDs
+Assign tax rates to draft invoices for automatic tax calculation.
+If you’re looking for automated tax calculation where you don’t need to define the rates, use Stripe Tax.
+
+After you create a tax rate, you can assign it:
+
+On individual invoice items.
+On the entire subtotal of the invoice.
+Note
+Stripe recommends that you assign a tax rate on individual invoice items.
+
+Set tax rates on individual items
+You can set tax rates on individual items using the Dashboard or API. You can add up to five tax rates to each line item.
+
+
+Dashboard
+
+API
+When you modify or create invoice line items through the API, set the invoice item’s tax_rates:
+
+
+curl
+
+Stripe CLI
+
+Ruby
+
+Python
+
+PHP
+
+Java
+
+Node
+
+Go
+
+.NET
+Command Line
+
+
+curl https://api.stripe.com/v1/invoiceitems/ii_CWYWo9Ham19N4a \
+  -u "sk_test_4eC39HqLyjWDarjtT1zdp7dc:" \
+  -d "tax_rates[]"=txr_1EO66sClCIKljWvs98IiVfHW \
+  -d "tax_rates[]"=txr_1EEOvcClCIKljWvsqYb9U0MB
+For type subscription or invoiceitem, use the line item’s id. For type=invoiceitem, you can also use the invoice_item value.
+
+Warning
+For API version 2018-05-21 and earlier, you must pass the unique_line_item_id parameter instead of the line item’s id field. Pass the id field that starts with sli_.
+
+Set default tax rates for the entire invoice
+If you sell one type of product, or have simple tax needs, you can set a default tax rate on the invoice. Default tax rates apply to all invoice line items. For more complex use cases, you can also set an item-level tax rate that overrides the default tax rate. You can add up to five default tax rates to each invoice.
+
+
+Dashboard
+
+API
+To set the invoice’s default_tax_rates through the API:
+
+
+curl
+
+Stripe CLI
+
+Ruby
+
+Python
+
+PHP
+
+Java
+
+Node
+
+Go
+
+.NET
+Command Line
+
+
+curl https://api.stripe.com/v1/invoices/in_18jwqyLlRB0eXbMtrUQ97YBw \
+  -u "sk_test_4eC39HqLyjWDarjtT1zdp7dc:" \
+  -d "default_tax_rates[]"=txr_1EO66sClCIKljWvs98IiVfHW \
+  -d "default_tax_rates[]"=txr_1EEOvcClCIKljWvsqYb9U0MB

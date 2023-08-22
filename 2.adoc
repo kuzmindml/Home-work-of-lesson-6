@@ -1,0 +1,60 @@
+=== How to add an invoice field
+
+The following table explains the ways that you can populate different invoice fields. To ensure that your invoices are compliant and adhere to geographic and business regulations, Stripe recommends that you consult with your tax and legal advisors.
+
+[%autowidth]
+|===
+|KEY	|FIELD	|REQUIRED?	|HOW TO POPULATE
+
+|1	|Invoice number	|This is always required.	|Stripe populates this by default. You can change how invoices are numbered (customer or account level) in the https://dashboard.stripe.com/login?redirect=%2Fsettings%2Fbilling%2Finvoice[Invoice template].
+
+|2	|Date of issue	|This is always required.	|Stripe populates this by default.
+
+|3	|Date due	|There’s no requirement to display the date by which a customer must pay an invoice. However, it’s a best practice.	|Stripe populates this by default.
+
+|4a	|Merchant company name	|This is always required.	|Stripe populates this by default.
+
+|4b	|Merchant company address	|Sending an invoice to another business always requires this field.	|Enter your *Support address* under https://dashboard.stripe.com/login?redirect=%2Fsettings%2Fpublic[Public business information]. You can also default to your business address as listed in your https://dashboard.stripe.com/login?redirect=%2Fsettings%2Faccount[account settings].
+
+|5	|Merchant VAT ID	|​​Invoices generally require a merchant VAT ID (or tax ID). If you sell goods or services to a business customer in another EU country, you must mention your VAT ID, which is a number that contains a country prefix.	|Add your relevant tax or VAT ID by navigating to *Manage tax information* in the Invoice template.
+
+|6a	|Recipient name	|This is always required.	|Stripe populates this by default.
+
+|6b	|Recipient address	|This is always required.	|You can add this field by clicking the *Additional details* button when you first create a customer.
+
+|7	|Recipient VAT ID	|Sending an invoice to another business typically requires this field. ​​If you sell goods or services to a business customer in another EU country, you must mention the customer’s VAT ID, which is a number that contains a country prefix.	|You can add this field by:
+
+1. Clicking *Add additional details* (just like with the recipient address) when you create a new customer, and scrolling down to *Tax ID* at the bottom of the dialog.
+
+2. Adding it as a custom field under *Advanced options* when you create an invoice.
+
+|8	|Name of the good or service	|This is always required.	
+|Stripe populates this by default.
+
+|9	|Invoice line item supply date	|This is always required when the supply date of individual line items is different from the invoice send date.	|You can display line item supply dates by clicking the toggle under *Item options*.
+
+|10	|Price of the good or service	|For an invoice to be compliant, it must display tax-exclusive prices. For each invoice line item, you must show the following:
+Unit price (excluding VAT).
+Quantity.
+Any applicable discounts.
+Total amount payable (excluding VAT), which is the unit price times the quantity, minus discounts.
+|You must display tax-exclusive prices to comply with EU invoicing rules.footnoteref:[1]
+
+|11	|Invoice line item tax rate percentagefootnoteref:[2]	|This is always required. It’s sufficient to display the tax percentage amount for an invoice line item. You’re not required to display the cash amount per invoice line item.	|You can determine the tax to display on an invoice by:
+
+1. Using https://stripe.com/docs/tax/invoicing[Stripe Tax] to automatically calculate the tax.
+
+2. ​​Manually adding the tax rate when you are create an item. *Select Item taxes and coupons*, enter your desired tax rate, then *Create* a https://dashboard.stripe.com/login?redirect=%2Ftest%2Ftax-rates[new tax rate].
+
+|12	|Invoice subtotal (excludes VAT)	|This is always required.	|Stripe populates this by default.
+
+|13	|VAT amount	|This is always required.	|Stripe populates this by default.
+
+|14	|Invoice total (includes VAT)	|This is always required.	|Stripe populates this by default.
+
+|N/A	|Custom fields	|In some European countries, you must also display additional information including the business registration number, purchase order (PO), or payment due date.	|Under *Advanced options* in the https://dashboard.stripe.com/login?redirect=%2Finvoices%2Fcreate[Invoice Editor], click *Add custom field*.
+|===
+
+footnoteref:[1] To display tax-exclusive prices with Stripe Tax, select *No* under *Include tax in price* to exclude tax. This excludes tax in prices in the invoice PDF, the Invoice Details page, and in the invoice email. You can also select *Yes* under *Include tax in price*, then check the *Display tax-exclusive prices* option in the *Items Options* dialog of the *Items* section. This excludes tax in prices in the invoice PDF, but includes tax on the Invoice Details page and in the email. If you’re adding tax rates manually for a business, you can either set *Include tax in price* to *No*, or set *Include tax in price* to *Yes* and check *Display tax-exclusive prices* in the *Items Options* dialog. The second approach includes tax on the Invoice Details page and in the email, but not in the invoice PDF.
+
+footnoteref:[2]​​ If a transaction isn’t subject to tax, you must state the reason for not applying it. For example, if the tax liability shifts to your customer (that is, your customer now has to account for tax), you must mention it as a “reverse charge” on the invoice. In the case of an EU business selling to another EU business, you must mention “zero-rated intra-Community supply." To include these references in your invoice, add a custom field under *Advanced options* in the https://dashboard.stripe.com/login?redirect=%2Ftest%2Finvoices%2Fcreate[Invoice Editor].
