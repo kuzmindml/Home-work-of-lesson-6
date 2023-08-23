@@ -2,85 +2,539 @@
 Tax rates and IDs
 =================
 Assign tax rates to draft invoices for automatic tax calculation.
-If you’re looking for automated tax calculation where you don’t need to define the rates, use Stripe Tax.
+=================================================================
 
-After you create a tax rate, you can assign it:
+If you’re looking for automated tax calculation where you don’t need to define the rates, use `Stripe Tax <https://stripe.com/docs/tax>`_.
 
-On individual invoice items.
-On the entire subtotal of the invoice.
-Note
-Stripe recommends that you assign a tax rate on individual invoice items.
+After you `create a tax rate <https://stripe.com/docs/billing/taxes/tax-rates>`_, you can assign it:
 
+* On individual `invoice <https://stripe.com/docs/api/invoices>`_` items.
+
+* On the entire subtotal of the invoice.
+  
+
+    **Note**
+
+    Stripe recommends that you assign a tax rate on individual invoice items.
+
+---------------------------------
 Set tax rates on individual items
-You can set tax rates on individual items using the Dashboard or API. You can add up to five tax rates to each line item.
+---------------------------------
 
+You can set tax rates on individual items using the `Dashboard <https://dashboard.stripe.com/login?redirect=%2Finvoices%2Fcreate>`_ or `API <https://stripe.com/docs/api/tax_rates>`_. You can add up to five tax rates to each line item.
 
-Dashboard
 
 API
-When you modify or create invoice line items through the API, set the invoice item’s tax_rates:
+~~~
+
+When you modify or create invoice line items through the API, set the invoice item’s `tax_rates <https://stripe.com/docs/api/invoiceitems/update#update_invoiceitem-tax_rates>`_:
 
 
 curl
+""""
 
-Stripe CLI
-
-Ruby
-
-Python
-
-PHP
-
-Java
-
-Node
-
-Go
-
-.NET
 Command Line
 
+{
 
-curl https://api.stripe.com/v1/invoiceitems/ii_CWYWo9Ham19N4a \
+  curl https://api.stripe.com/v1/invoiceitems/ii_CWYWo9Ham19N4a \
+
   -u "sk_test_4eC39HqLyjWDarjtT1zdp7dc:" \
-  -d "tax_rates[]"=txr_1EO66sClCIKljWvs98IiVfHW \
-  -d "tax_rates[]"=txr_1EEOvcClCIKljWvsqYb9U0MB
-For type subscription or invoiceitem, use the line item’s id. For type=invoiceitem, you can also use the invoice_item value.
 
-Warning
-For API version 2018-05-21 and earlier, you must pass the unique_line_item_id parameter instead of the line item’s id field. Pass the id field that starts with sli_.
+    -d "tax_rates[]"=txr_1EO66sClCIKljWvs98IiVfHW \
 
+    -d "tax_rates[]"=txr_1EEOvcClCIKljWvsqYb9U0MB
+
+}
+
+
+
+Stripe CLI
+""""""""""
+
+Command Line
+
+{
+
+  stripe invoiceitems update ii_CWYWo9Ham19N4a \
+
+  -d "tax_rates[0]"=txr_1EO66sClCIKljWvs98IiVfHW \
+
+  -d "tax_rates[1]"=txr_1EEOvcClCIKljWvsqYb9U0MB
+
+}
+
+
+
+
+Ruby
+""""
+
+server.rb
+
+{
+
+  # Set your secret key. Remember to switch to your live secret key in production.
+
+  # See your keys here: https://dashboard.stripe.com/apikeys
+
+  Stripe.api_key = 'sk_test_4eC39HqLyjWDarjtT1zdp7dc'
+
+  Stripe::InvoiceItem.update(
+
+    'ii_CWYWo9Ham19N4a',
+
+    {tax_rates: ['txr_1EO66sClCIKljWvs98IiVfHW', 'txr_1EEOvcClCIKljWvsqYb9U0MB']},
+
+  )
+
+}
+
+
+
+
+Python
+""""""
+
+server.py
+
+{
+
+  # Set your secret key. Remember to switch to your live secret key in production.
+
+  # See your keys here: https://dashboard.stripe.com/apikeys
+
+  import stripe
+
+  stripe.api_key = "sk_test_4eC39HqLyjWDarjtT1zdp7dc"
+
+  stripe.InvoiceItem.modify(
+
+    "ii_CWYWo9Ham19N4a",
+
+    tax_rates=["txr_1EO66sClCIKljWvs98IiVfHW", "txr_1EEOvcClCIKljWvsqYb9U0MB"],
+
+  )
+
+}
+
+
+
+PHP
+"""
+
+index.php
+
+{
+
+  // Set your secret key. Remember to switch to your live secret key in production.
+
+  // See your keys here: https://dashboard.stripe.com/apikeys
+
+  $stripe = new \Stripe\StripeClient('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+
+  $stripe->invoiceItems->update(
+
+    'ii_CWYWo9Ham19N4a',
+
+    ['tax_rates' => ['txr_1EO66sClCIKljWvs98IiVfHW', 'txr_1EEOvcClCIKljWvsqYb9U0MB']]
+
+  );
+
+}
+
+
+
+Java
+""""
+
+server.java
+
+{
+
+  // Set your secret key. Remember to switch to your live secret key in production.
+
+  // See your keys here: https://dashboard.stripe.com/apikeys
+
+  Stripe.apiKey = "sk_test_4eC39HqLyjWDarjtT1zdp7dc";
+
+  InvoiceItem resource = InvoiceItem.retrieve("ii_CWYWo9Ham19N4a");
+
+  InvoiceItemUpdateParams params =
+
+   InvoiceItemUpdateParams.builder()
+
+     .addTaxRate("txr_1EO66sClCIKljWvs98IiVfHW")
+
+      .addTaxRate("txr_1EEOvcClCIKljWvsqYb9U0MB")
+
+      .build();
+
+  InvoiceItem invoiceItem = resource.update(params);
+}
+
+
+
+
+Node
+""""
+
+server.js
+
+{
+
+  /// Set your secret key. Remember to switch to your live secret key in production.
+
+  // See your keys here: https://dashboard.stripe.com/apikeys
+
+  const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+
+  const invoiceItem = await stripe.invoiceItems.update(
+
+    'ii_CWYWo9Ham19N4a',
+
+    {
+
+      tax_rates: ['txr_1EO66sClCIKljWvs98IiVfHW', 'txr_1EEOvcClCIKljWvsqYb9U0MB'],
+
+    }
+
+  );
+
+}
+
+
+
+Go
+""
+
+server.go
+
+{
+
+  // Set your secret key. Remember to switch to your live secret key in production.
+
+  // See your keys here: https://dashboard.stripe.com/apikeys
+
+  stripe.Key = "sk_test_4eC39HqLyjWDarjtT1zdp7dc"
+
+  params := &stripe.InvoiceItemParams{
+
+   TaxRates: []*string{
+
+      stripe.String("txr_1EO66sClCIKljWvs98IiVfHW"),
+
+      stripe.String("txr_1EEOvcClCIKljWvsqYb9U0MB"),
+
+   },
+
+  };
+
+  result, err := invoiceitem.Update("ii_CWYWo9Ham19N4a", params);
+
+}
+
+
+
+.NET
+""""
+
+Program.cs
+
+{
+
+  // Set your secret key. Remember to switch to your live secret key in production.
+
+  // See your keys here: https://dashboard.stripe.com/apikeys
+
+  tripeConfiguration.ApiKey = "sk_test_4eC39HqLyjWDarjtT1zdp7dc";
+
+  var options = new InvoiceItemUpdateOptions
+
+  {
+
+    TaxRates = new List<string>
+
+    {
+
+        "txr_1EO66sClCIKljWvs98IiVfHW",
+
+        "txr_1EEOvcClCIKljWvsqYb9U0MB",
+
+    },
+
+  };
+
+  var service = new InvoiceItemService();
+
+  service.Update("ii_CWYWo9Ham19N4a", options);
+
+}
+
+For `type <https://stripe.com/docs/api/invoices/line_item#invoice_line_item_object-type>`_ *subscription* or *invoiceitem*, use the line item’s `id <https://stripe.com/docs/api/invoices/line_item#invoice_line_item_object-id>`_. For *type=invoiceitem*, you can also use the `invoice_item <https://stripe.com/docs/api/invoices/line_item#invoice_line_item_object-invoice_item>`_ value.
+
+
+    **Warning**
+
+    For API version `2018-05-21 <https://stripe.com/docs/upgrades#2018-05-21>`_ and earlier, you must pass the *unique_line_item_id* parameter instead of the line item’s *id* field. Pass the *id* field that starts with *sli*.
+
+--------------------------------------------
 Set default tax rates for the entire invoice
+--------------------------------------------
+
 If you sell one type of product, or have simple tax needs, you can set a default tax rate on the invoice. Default tax rates apply to all invoice line items. For more complex use cases, you can also set an item-level tax rate that overrides the default tax rate. You can add up to five default tax rates to each invoice.
 
 
-Dashboard
 
 API
-To set the invoice’s default_tax_rates through the API:
+~~~
+To set the invoice’s `default_tax_rates <https://stripe.com/docs/api/invoices/update#update_invoice-default_tax_rates>`_ through the API:
 
 
 curl
+""""
+{
+  curl https://api.stripe.com/v1/invoices/in_18jwqyLlRB0eXbMtrUQ97YBw \
+
+  -u "sk_test_4eC39HqLyjWDarjtT1zdp7dc:" \
+
+  -d "default_tax_rates[]"=txr_1EO66sClCIKljWvs98IiVfHW \
+
+  -d "default_tax_rates[]"=txr_1EEOvcClCIKljWvsqYb9U0MB
+
+}
 
 Stripe CLI
+""""""""""
 
-Ruby
-
-Python
-
-PHP
-
-Java
-
-Node
-
-Go
-
-.NET
 Command Line
 
+{
 
-curl https://api.stripe.com/v1/invoices/in_18jwqyLlRB0eXbMtrUQ97YBw \
-  -u "sk_test_4eC39HqLyjWDarjtT1zdp7dc:" \
-  -d "default_tax_rates[]"=txr_1EO66sClCIKljWvs98IiVfHW \
-  -d "default_tax_rates[]"=txr_1EEOvcClCIKljWvsqYb9U0MB
+  stripe invoices update in_18jwqyLlRB0eXbMtrUQ97YBw \
+
+    -d "default_tax_rates[0]"=txr_1EO66sClCIKljWvs98IiVfHW \
+
+    -d "default_tax_rates[1]"=txr_1EEOvcClCIKljWvsqYb9U0MB
+
+}
+
+
+
+
+Ruby
+""""
+
+server.rb
+
+{
+
+  # Set your secret key. Remember to switch to your live secret key in production.
+
+  # See your keys here: https://dashboard.stripe.com/apikeys
+
+  Stripe.api_key = 'sk_test_4eC39HqLyjWDarjtT1zdp7dc'
+
+  Stripe::Invoice.update(
+
+    'in_18jwqyLlRB0eXbMtrUQ97YBw',
+
+    {default_tax_rates: ['txr_1EO66sClCIKljWvs98IiVfHW', 'txr_1EEOvcClCIKljWvsqYb9U0MB']},
+
+)
+
+}
+
+
+
+
+Python
+""""""
+
+server.py
+
+{
+
+  # Set your secret key. Remember to switch to your live secret key in production.
+
+  # See your keys here: https://dashboard.stripe.com/apikeys
+
+  import stripe
+
+  stripe.api_key = "sk_test_4eC39HqLyjWDarjtT1zdp7dc"
+
+  stripe.Invoice.modify(
+
+   "in_18jwqyLlRB0eXbMtrUQ97YBw",
+
+   default_tax_rates=["txr_1EO66sClCIKljWvs98IiVfHW", "txr_1EEOvcClCIKljWvsqYb9U0MB"],
+
+)
+
+}
+
+
+
+PHP
+"""
+
+index.php
+
+{
+
+  // Set your secret key. Remember to switch to your live secret key in production.
+
+  // See your keys here: https://dashboard.stripe.com/apikeys
+
+  $stripe = new \Stripe\StripeClient('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+
+  $stripe->invoices->update(
+
+  'in_18jwqyLlRB0eXbMtrUQ97YBw',
+
+  [
+
+    'default_tax_rates' => [
+
+      'txr_1EO66sClCIKljWvs98IiVfHW',
+
+      'txr_1EEOvcClCIKljWvsqYb9U0MB',
+
+    ],
+
+  ]
+
+);
+
+}
+
+
+
+Java
+""""
+
+server.java
+
+{
+
+  // Set your secret key. Remember to switch to your live secret key in production.
+
+  // See your keys here: https://dashboard.stripe.com/apikeys
+
+  Stripe.apiKey = "sk_test_4eC39HqLyjWDarjtT1zdp7dc";
+
+  Invoice resource = Invoice.retrieve("in_18jwqyLlRB0eXbMtrUQ97YBw");
+
+  InvoiceUpdateParams params =
+
+    InvoiceUpdateParams.builder()
+
+      .addDefaultTaxRate("txr_1EO66sClCIKljWvs98IiVfHW")
+
+      .addDefaultTaxRate("txr_1EEOvcClCIKljWvsqYb9U0MB")
+
+      .build();
+
+  Invoice invoice = resource.update(params);
+
+}
+
+
+
+
+Node
+""""
+
+server.js
+
+{
+
+  // Set your secret key. Remember to switch to your live secret key in production.
+
+  // See your keys here: https://dashboard.stripe.com/apikeys
+
+  const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+
+  const invoice = await stripe.invoices.update(
+
+    'in_18jwqyLlRB0eXbMtrUQ97YBw',
+
+    {
+
+     default_tax_rates: ['txr_1EO66sClCIKljWvs98IiVfHW', 'txr_1EEOvcClCIKljWvsqYb9U0MB'],
+
+   }
+
+  );
+
+}
+
+
+
+Go
+""
+
+server.go
+
+{
+
+  // Set your secret key. Remember to switch to your live secret key in production.
+
+  // See your keys here: https://dashboard.stripe.com/apikeys
+
+  stripe.Key = "sk_test_4eC39HqLyjWDarjtT1zdp7dc"
+
+  params := &stripe.InvoiceParams{
+
+    DefaultTaxRates: []*string{
+
+      stripe.String("txr_1EO66sClCIKljWvs98IiVfHW"),
+
+      stripe.String("txr_1EEOvcClCIKljWvsqYb9U0MB"),
+
+    },
+
+  };
+
+  result, err := invoice.Update("in_18jwqyLlRB0eXbMtrUQ97YBw", params);
+
+  Was this page helpful?
+
+Yes
+
+No
+
+}
+
+
+
+.NET
+""""
+
+Program.cs
+
+{
+
+  // Set your secret key. Remember to switch to your live secret key in production.
+
+  // See your keys here: https://dashboard.stripe.com/apikeys
+
+  StripeConfiguration.ApiKey = "sk_test_4eC39HqLyjWDarjtT1zdp7dc";
+
+  var options = new InvoiceUpdateOptions
+  {
+    DefaultTaxRates = new List<string>
+    {
+        "txr_1EO66sClCIKljWvs98IiVfHW",
+
+        "txr_1EEOvcClCIKljWvsqYb9U0MB",
+
+    },
+
+  };
+
+  var service = new InvoiceService();
+
+  service.Update("in_18jwqyLlRB0eXbMtrUQ97YBw", options);
+
+}
